@@ -2,11 +2,12 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import express from "express";
-// import compression from "compression";
+import compression from "compression";
 // import routes from "./routes/index.js";
 import cookieParser from "cookie-parser";
 // import rateLimit from "express-rate-limit";
 // import errorHandler from "./middlewares/error.middleware.js";
+import userRouter from "./modules/user/user.routes.js";
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.use(
     })
 );
 
-// app.use(compression());
+app.use(compression());
 
 // app.use(
 //     "/api",
@@ -32,6 +33,8 @@ app.use(
 app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/v1/auth/", userRouter);
 
 // if (process.env.NODE_ENV === "development") {
 // app.use(morgan("dev"));
