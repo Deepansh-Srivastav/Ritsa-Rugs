@@ -2,42 +2,51 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import express from "express";
-// import compression from "compression";
-// import routes from "./routes/index.js";
+import compression from "compression";
 import cookieParser from "cookie-parser";
-// import rateLimit from "express-rate-limit";
-// import errorHandler from "./middlewares/error.middleware.js";
+import rateLimit from "express-rate-limit";
+import errorHandler from "./middlewares/errorHandler.js";
+import userRouter from "./modules/user/user.routes.js";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 
+console.log("value is ", process.env.NODE_ENV);
+
 app.use(helmet());
+
+let type = process.env.NODE_ENV === "development" ? "dev" : "combined";
+
+app.use(morgan(type));
+
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    "http://localhost:5173"
+];
 
 app.use(
     cors({
-        origin: process.env.CLIENT_URL,
+        origin: allowedOrigins,
         credentials: true,
     })
 );
 
-// app.use(compression());
+app.use(compression());
 
-// app.use(
-//     "/api",
-//     rateLimit({
-//         windowMs: 15 * 60 * 1000,
-//         max: 100,
-//     })
-// );
+app.use(
+    "/api",
+    rateLimit({
+        windowMs: 15 * 60 * 1000,
+        max: 99,
+    })
+);
 
 app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
 
-// if (process.env.NODE_ENV === "development") {
-// app.use(morgan("dev"));
-// };
+app.use("/api/v1/auth", userRouter);
 
-// app.use("/api", routes);
-// app.use(errorHandler);
+app.use(errorHandler);
 
 export default app;
