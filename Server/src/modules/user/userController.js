@@ -2,11 +2,27 @@ import userService from "../../services/user.service.js"
 
 export async function createUserController(req, res, next) {
     try {
-        const user = await userService.createUser(req.body);
+        const userData = await userService.createUser(req.body);
 
         res.status(201).json({
             success: true,
             message: "User created successfully",
+            data: userData,
+        });
+
+    } catch (err) {
+        next(err);
+    }
+};
+
+export async function getUserDetailsController(req, res, next) {
+    try {
+        const { userId } = req.params;
+
+        const user = await userService.getUserById(userId);
+
+        res.status(200).json({
+            success: true,
             data: user,
         });
     } catch (err) {
@@ -14,3 +30,34 @@ export async function createUserController(req, res, next) {
     }
 };
 
+export async function updateUserDetailsController(req, res, next) {
+    try {
+        const { userId } = req.params;
+
+        const user = await userService.updateUserById(userId, req.body);
+
+        res.status(200).json({
+            success: true,
+            message: "User updated successfully",
+            data: user,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export async function softDeleteUserController(req, res, next) {
+    try {
+        const { userId } = req.params;
+
+        const user = await userService.softDeleteUserById(userId);
+
+        res.status(200).json({
+            success: true,
+            message: "Account deleted successfully",
+            data: user,
+        });
+    } catch (err) {
+        next(err);
+    };
+};
