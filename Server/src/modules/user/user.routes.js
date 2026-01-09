@@ -1,12 +1,10 @@
 import { Router } from "express";
 import authMiddleware from "../../middlewares/auth.js";
-import { greetUser } from "./userController.js";
+import { createUserController } from "./userController.js";
 
 const userRouter = Router();
 
-userRouter.get("/hello", greetUser);
-
-// userRouter.post("/register", getUsers);
+userRouter.post("/register", createUserController);
 // userRouter.post("/login", authMiddleware, getUserById);
 // userRouter.post("/logout", authMiddleware, updateUser);
 // userRouter.get("/:id", authMiddleware, deleteUser);

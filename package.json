@@ -1,5 +1,9 @@
 {
-  "dependencies": {
-    "compression": "^1.8.1"
+  "name": "Ritsa_Rugs",
+  "main": "Server/src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm run dev --prefix Client",
+    "server": "npm run dev --prefix Server"
   }
 }
