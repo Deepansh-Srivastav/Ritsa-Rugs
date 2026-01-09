@@ -1,5 +1,6 @@
-import User from "../modules/user/user.model.js";
+import bcrypt from "bcrypt";
 import AppError from "../utils/AppError.js";
+import User from "../modules/user/user.model.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/token.generator.js";
 
 export async function validateAuthenticatedUser(userId) {

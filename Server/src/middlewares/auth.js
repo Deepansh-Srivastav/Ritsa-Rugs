@@ -14,5 +14,5 @@ export default async function authMiddleware(req, res, next) {
         next();
     } catch (err) {
         next(err);
-    }
-}
+    };
+};

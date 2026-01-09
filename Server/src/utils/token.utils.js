@@ -8,12 +8,13 @@ export function extractAccessToken(req) {
     }
 
     const authHeader = req.headers.authorization;
+    
     if (authHeader && authHeader.startsWith("Bearer ")) {
         return authHeader.split(" ")[1];
     }
 
     AppError("Authentication required", 401);
-}
+};
 
 export function verifyAccessToken(token) {
     try {
