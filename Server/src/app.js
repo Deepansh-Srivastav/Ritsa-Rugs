@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import errorHandler from "./middlewares/errorHandler.js";
 import userRouter from "./modules/user/user.routes.js";
+import authRouter from "./modules/authentication/authentication.routes.js";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -45,7 +46,8 @@ app.use(
 app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
 
-app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/auth", authRouter);
 
 app.use(errorHandler);
 
