@@ -70,3 +70,19 @@ export async function loginUser({ email, password }) {
         }
     };
 };
+
+export async function logoutUser(refreshToken) {
+    if (!refreshToken) {
+        AppError("No active session", 400);
+    }
+
+    const user = await User.findOne({ refreshToken });
+
+    if (!user) {
+        // token already invalidated → idempotent logout
+        return;
+    }
+
+    user.refreshToken = null;
+    await user.save();
+}
