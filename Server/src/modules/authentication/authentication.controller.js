@@ -1,4 +1,4 @@
-import { loginUser } from "../../services/auth.service.js";
+import { loginUser, logoutUser } from "../../services/auth.service.js";
 
 export const loginUserController = async (req, res, next) => {
     try {
@@ -16,6 +16,27 @@ export const loginUserController = async (req, res, next) => {
             message: "Login successful",
             accessToken: result.accessToken,
             user: result.user
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const logoutUserController = async (req, res, next) => {
+    try {
+        const refreshToken = req.cookies?.refreshToken;
+
+        await logoutUser(refreshToken);
+
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Logged out successfully",
         });
     } catch (err) {
         next(err);
