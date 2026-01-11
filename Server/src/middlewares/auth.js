@@ -1,7 +1,7 @@
 import { extractAccessToken, verifyAccessToken } from "../utils/token.utils.js";
 import { validateAuthenticatedUser } from "../services/auth.service.js";
 
-export default async function authMiddleware(req, res, next) {
+export default async function authenticationMiddleware(req, res, next) {
     try {
         const token = extractAccessToken(req);
 
