@@ -34,7 +34,6 @@ export const getUserAddressesController = async (req, res, next) => {
 
 export const getAddressByIdController = async (req, res, next) => {
     try {
-        console.log('req.user.id, req.params.id', req.user.id, req.params.addressId);
         const address = await getAddressById(req.user.id, req.params.addressId);
 
         res.status(200).json({

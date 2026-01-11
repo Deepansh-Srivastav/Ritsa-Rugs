@@ -1,5 +1,5 @@
 import express from "express";
-import authMiddleware from "../../middlewares/auth.js";
+import authenticationMiddleware from "../../middlewares/auth.js";
 import {
     createAddressController,
     getUserAddressesController,
@@ -12,7 +12,7 @@ const addressRouter = express.Router();
 
 const param = ":addressId"
 
-addressRouter.use(authMiddleware);
+addressRouter.use(authenticationMiddleware);
 
 addressRouter.post("/create-address", createAddressController);
 addressRouter.get("/get-all-addresses", getUserAddressesController);

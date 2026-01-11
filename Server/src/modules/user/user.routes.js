@@ -1,5 +1,5 @@
 import { Router } from "express";
-import authMiddleware from "../../middlewares/auth.js";
+import authenticationMiddleware from "../../middlewares/auth.js";
 import {
     createUserController,
     updateUserDetailsController,
@@ -10,8 +10,8 @@ import {
 const userRouter = Router();
 
 userRouter.post("/register-user", createUserController);
-userRouter.get("/get-user-details", authMiddleware, getUserDetailsController);
-userRouter.put("/update-user-details", authMiddleware, updateUserDetailsController);
-userRouter.delete("/delete-user", authMiddleware, softDeleteUserController);
+userRouter.get("/get-user-details", authenticationMiddleware, getUserDetailsController);
+userRouter.put("/update-user-details", authenticationMiddleware, updateUserDetailsController);
+userRouter.delete("/delete-user", authenticationMiddleware, softDeleteUserController);
 
 export default userRouter;
