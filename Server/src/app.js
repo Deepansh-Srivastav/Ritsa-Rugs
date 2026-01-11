@@ -9,6 +9,7 @@ import errorHandler from "./middlewares/errorHandler.js";
 import userRouter from "./modules/user/user.routes.js";
 import authRouter from "./modules/authentication/authentication.routes.js";
 import addressRouter from "./modules/address/address.routes.js"
+import adminRouter from "./modules/admin/admin.routes.js";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -50,6 +51,8 @@ app.use(cookieParser());
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", addressRouter);
+app.use("/api/v1/admin", adminRouter);
+
 
 
 app.use(errorHandler);

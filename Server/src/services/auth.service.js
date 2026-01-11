@@ -85,4 +85,4 @@ export async function logoutUser(refreshToken) {
 
     user.refreshToken = null;
     await user.save();
-}
+};
