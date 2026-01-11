@@ -20,7 +20,7 @@ export async function validateAuthenticatedUser(userId) {
     };
 };
 
-export async function loginUser({ email, password }) {
+export async function loginUser({ email, password }, adminLogin = false) {
 
     if (!email || !password) {
         AppError("Email and password are required", 400);
@@ -39,13 +39,18 @@ export async function loginUser({ email, password }) {
         AppError("Account is deactivated", 403);
     }
 
+    if (adminLogin) {
+        if (user.role !== "admin") {
+            AppError("Access denied. Admin role required.", 403);
+        };
+    };
+
     const isPasswordMatch = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatch) {
         AppError("Invalid email or password", 401);
     }
 
-    // generate tokens
     const payload = {
         userId: user._id,
         role: user.role
@@ -54,7 +59,6 @@ export async function loginUser({ email, password }) {
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
-    // store refresh token (important)
     user.refreshToken = refreshToken;
     user.lastLoginAt = new Date();
     await user.save();
