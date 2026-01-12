@@ -11,8 +11,6 @@ export const addToCart = async (userId, productId, quantity = 1) => {
 
     const product = await Product.findById(productId);
 
-    console.log('product ', product);
-
     if (product?.stock < 1) {
         AppError("Product is out of stock", 409);
     };
@@ -112,10 +110,20 @@ export const updateCartItemQuantity = async (userId, productId, action) => {
 
 export const removeCartItem = async (userId, productId) => {
     const cart = await Cart.findOne({ user: userId });
-    if (!cart) throw new AppError("Cart not found", 404);
+    if (!cart) AppError("Cart not found", 404);
+
+    const isValidCartItem = cart.items.find(
+        (item) => item.productId.toString() === productId
+    );
+
+    console.log("this is isValid - ", isValidCartItem);
+
+    if (!isValidCartItem) {
+        AppError("Item not found in cart", 404)
+    };
 
     cart.items = cart.items.filter(
-        (i) => i.product.toString() !== productId
+        (i) => i.productId.toString() !== productId
     );
 
     await cart.save();
