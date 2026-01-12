@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema(
             trim: true,
             maxlength: 120,
             index: true,
+            required: true,
         },
 
         slug: {
@@ -41,6 +42,12 @@ const productSchema = new mongoose.Schema(
             },
         },
 
+        taxCategory: {
+            type: String,
+            enum: ["GST_5", "GST_12", "GST_18"],
+            required: true,
+        },
+
         stock: {
             type: Number,
             required: true,
@@ -48,20 +55,22 @@ const productSchema = new mongoose.Schema(
             default: 0,
         },
 
-        category: {
-            type: String,
-            // required: true,
-            index: true,
-            default: "Rugs"
-        },
+        // category: {
+        //     type: String,
+        //     // required: true,
+        //     index: true,
+        //     default: "Rugs"
+        // },
 
         thumbnail: {
             type: String,
+            required: true,
         },
 
         images: [
             {
                 type: String,
+                required: true,
             },
         ],
 
