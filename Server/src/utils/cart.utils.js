@@ -1,4 +1,3 @@
-import GST_RATES from "../config/tax.config.js";
 import { calculatePrices } from "./product.utils.js";
 
 export const calculateCartPricing = (items) => {

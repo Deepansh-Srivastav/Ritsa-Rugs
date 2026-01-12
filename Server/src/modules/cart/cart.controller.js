@@ -40,18 +40,14 @@ export const getCartController = async (req, res, next) => {
     }
 };
 
-export const updateCartItemQuantityController = async (
-    req,
-    res,
-    next
-) => {
+export const updateCartItemQuantityController = async (req, res, next) => {
     try {
-        const { productId, delta } = req.body;
+        const { productId, action } = req.body;
 
         const cart = await updateCartItemQuantity(
             req.user.id,
             productId,
-            delta
+            action
         );
 
         res.status(200).json({

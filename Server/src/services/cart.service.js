@@ -9,11 +9,17 @@ export const addToCart = async (userId, productId, quantity = 1) => {
         AppError("Product not provided", 404);
     }
 
-    const product = await Product.findById(productId)
+    const product = await Product.findById(productId);
+
+    console.log('product ', product);
+
+    if (product?.stock < 1) {
+        AppError("Product is out of stock", 409);
+    };
 
     if (!product.isActive) {
         AppError("Product not available", 404);
-    }
+    };
 
     let cart = await Cart.findOne({ user: userId });
 
@@ -61,27 +67,44 @@ export const getCart = async (userId) => {
     };
 };
 
-export const updateCartItemQuantity = async (
-    userId,
-    productId,
-    delta
-) => {
+export const updateCartItemQuantity = async (userId, productId, action) => {
+
+    const allowedActions = ["INCREMENT", "DECREMENT"];
+
+    if (!action || !allowedActions.includes(action)) {
+        AppError("Can't update quantity invalid action", 404);
+    };
+
     const cart = await Cart.findOne({ user: userId });
-    if (!cart) throw new AppError("Cart not found", 404);
+
+    if (!cart) AppError("Cart not found", 404);
+
+
 
     const item = cart.items.find(
-        (i) => i.product.toString() === productId
+        (i) => i.productId.toString() === productId
     );
 
-    if (!item) throw new AppError("Item not in cart", 404);
+    if (!item) AppError("Item not present in cart", 404);
 
-    item.quantity += delta;
+    if (action === "INCREMENT") {
+        item.quantity += 1;
 
-    if (item.quantity <= 0) {
-        cart.items = cart.items.filter(
-            (i) => i.product.toString() !== productId
-        );
-    }
+        if (item?.quantity >= item.stock) {
+            item.quantity = item?.stock;
+        }
+    };
+
+    if (action === "DECREMENT") {
+
+        item.quantity -= 1;
+
+        if (item.quantity <= 0) {
+            cart.items = cart.items.filter(
+                (i) => i.productId.toString() !== productId
+            );
+        };
+    };
 
     await cart.save();
     return getCart(userId);
