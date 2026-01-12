@@ -15,15 +15,25 @@ const cartItemSchema = new mongoose.Schema(
             default: 1,
         },
 
-        priceAtAdd: {
+        basePriceAtAdd: {
             type: Number,
             required: true,
             min: 0,
         },
+
+        baseDiscountedPriceAtAdd: {
+            type: Number,
+            min: 0,
+        },
+
+        taxCategoryAtAdd: {
+            type: String,
+            enum: ["GST_5", "GST_12", "GST_18"],
+            required: true,
+        },
     },
     { _id: false }
 );
-
 const cartSchema = new mongoose.Schema(
     {
         user: {
