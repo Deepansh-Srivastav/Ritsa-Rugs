@@ -1,17 +1,19 @@
 import cors from "cors";
+import dotenv from 'dotenv';
 import helmet from "helmet";
 import morgan from "morgan";
 import express from "express";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
-import errorHandler from "./middlewares/errorHandler.js";
 import userRouter from "./modules/user/user.routes.js";
-import authRouter from "./modules/authentication/authentication.routes.js";
-import addressRouter from "./modules/address/address.routes.js"
+import cartRouter from "./modules/cart/cart.routes.js";
+import errorHandler from "./middlewares/errorHandler.js";
 import adminRouter from "./modules/admin/admin.routes.js";
+import addressRouter from "./modules/address/address.routes.js"
 import productRouter from "./modules/product/product.routes.js";
-import dotenv from 'dotenv';
+import authRouter from "./modules/authentication/authentication.routes.js";
+
 dotenv.config();
 
 const app = express();
@@ -54,6 +56,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", addressRouter);
 app.use("/api/v1/user", productRouter);
 app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/cart", cartRouter);
 
 app.use(errorHandler);
 

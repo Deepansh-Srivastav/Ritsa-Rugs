@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const cartItemSchema = new mongoose.Schema(
     {
-        product: {
+        productId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Product",
             required: true,
@@ -15,15 +15,35 @@ const cartItemSchema = new mongoose.Schema(
             default: 1,
         },
 
-        priceAtAdd: {
+        price: {
             type: Number,
             required: true,
             min: 0,
         },
+
+        discountPrice: {
+            type: Number,
+            min: 0,
+        },
+
+        taxCategory: {
+            type: String,
+            enum: ["GST_5", "GST_12", "GST_18"],
+            required: true,
+        },
+
+        stock: {
+            type: Number,
+            require: true,
+            min: 1
+        },
+        image: {
+            type: String,
+            require: true
+        }
     },
     { _id: false }
 );
-
 const cartSchema = new mongoose.Schema(
     {
         user: {
@@ -35,21 +55,6 @@ const cartSchema = new mongoose.Schema(
         },
 
         items: [cartItemSchema],
-
-        totalItems: {
-            type: Number,
-            default: 0,
-        },
-
-        totalPrice: {
-            type: Number,
-            default: 0,
-        },
-
-        finalPrice: {
-            type: Number,
-            default: 0,
-        },
 
         isActive: {
             type: Boolean,
