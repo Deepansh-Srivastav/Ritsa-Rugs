@@ -61,7 +61,7 @@ export const updateCartItemQuantityController = async (req, res, next) => {
     }
 };
 
-export const removeCartItemController = async (req, res, next) => {
+export const deleteCartItemController = async (req, res, next) => {
     try {
         const { productId } = req.params;
 
