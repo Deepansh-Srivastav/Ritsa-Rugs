@@ -69,10 +69,8 @@ export const deleteProductController = async (req, res, next) => {
             success: true,
             error: false,
             message: "Product deleted successfully",
-            data: null,
         });
     } catch (err) {
         next(err);
     }
 };
-

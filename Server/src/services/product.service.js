@@ -9,8 +9,8 @@ export const createProduct = async (data) => {
     }
     const { name, thumbnail, images, description, price, taxCategory, discountPrice } = data;
 
-    if (discountPrice && discountPrice > price) {
-        throw new AppError("Discount price cannot be greater than the original price", 400);
+    if (discountPrice && discountPrice >= price) {
+        throw new AppError("Discount price cannot be greater than or equal to the original price", 400);
     };
 
     if (!name) {
@@ -81,18 +81,44 @@ export const getProductBySlug = async (slug) => {
 };
 
 export const updateProduct = async (id, data) => {
+
+    if (!data) {
+        throw new AppError("No fields received to update", 400);
+    }
+
+    const existingProduct = await Product.findById(id);
+    if (!existingProduct) {
+        throw new AppError("Product not found", 404);
+    }
+
     if (data.name) {
         data.slug = generateSlug(data.name);
     }
 
-    const product = await Product.findByIdAndUpdate(id, data, {
-        new: true,
-        runValidators: true,
-    });
+    const effectivePrice =
+        data.price !== undefined ? data.price : existingProduct.price;
 
-    if (!product) throw new AppError("Product not found", 404);
-    return product;
+    if (data.discountPrice !== undefined) {
+        if (data.discountPrice >= effectivePrice) {
+            throw new AppError(
+                "Discount price must be less than price",
+                400
+            );
+        }
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+        id,
+        data,
+        {
+            new: true,
+            runValidators: true,
+        }
+    );
+
+    return updatedProduct;
 };
+
 
 export const deleteProduct = async (id) => {
     const product = await Product.findByIdAndDelete(id);

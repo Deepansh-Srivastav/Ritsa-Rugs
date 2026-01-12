@@ -34,12 +34,6 @@ const productSchema = new mongoose.Schema(
         discountPrice: {
             type: Number,
             min: 0,
-            validate: {
-                validator: function (value) {
-                    return value <= this.price;
-                },
-                message: "Discount price cannot be greater than price",
-            },
         },
 
         taxCategory: {
