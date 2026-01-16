@@ -65,3 +65,41 @@
   position: absolute;
   right: 1rem;
 }
+/* 
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  transition: opacity 1s linear;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 9;
+}
+
+.backdrop--visible {
+  opacity: 1;
+  visibility: visible;
+} */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 9;
+}
+
+.backdrop--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+
+#X{
+  width: 100px;
+  height: 10000px;
+  background-color: red;
+}
