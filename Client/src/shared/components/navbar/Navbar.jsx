@@ -32,8 +32,8 @@ const Navbar = () => {
     }, [isOpen]);
 
     const visibleMenuOptions = MENU_ITEMS?.filter((item) => {
-        // const isUserAuthenticated = false;
-        const isUserAuthenticated = true;
+        const isUserAuthenticated = false;
+        // const isUserAuthenticated = true;
         if (authOptions?.both === item?.auth) return true;
         if (authOptions?.guest === item?.auth) return !isUserAuthenticated;
         if (authOptions?.auth === item?.auth) return isUserAuthenticated;
@@ -139,9 +139,6 @@ const Navbar = () => {
 
                 </>
             )}
-
-
-
         </nav >
     );
 };
