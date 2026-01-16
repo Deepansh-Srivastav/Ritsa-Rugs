@@ -1,26 +1,21 @@
-// src/shared/components/Navbar/Navbar.jsx
 import { useEffect, useState } from "react";
 import "./Navbar.css";
 import {
     GiHamburgerMenu,
     IoMdClose,
     BsCart2,
-    IoHomeOutline,
-    RiShoppingBag2Line,
-    IoCallOutline,
-    IoPersonAddOutline,
-    CgProfile,
-    GoPerson,
     FaIndianRupeeSign
 } from "../../icons/icons.js";
 import { ritsaRugsLogo } from "../../images/images.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { BREAKPOINTS } from "../../constants/breakpoints.js";
 import useMediaQuery from "../../hooks/useMediaQuery.js";
+import { MENU_ITEMS, authOptions } from "../../config/menuConfig.js";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
     const isDesktop = useMediaQuery(BREAKPOINTS.desktop);
 
@@ -35,6 +30,14 @@ const Navbar = () => {
             document.body.classList.remove("no-scroll");
         };
     }, [isOpen]);
+
+    const visibleMenuOptions = MENU_ITEMS?.filter((item) => {
+        // const isUserAuthenticated = false;
+        const isUserAuthenticated = true;
+        if (authOptions?.both === item?.auth) return true;
+        if (authOptions?.guest === item?.auth) return !isUserAuthenticated;
+        if (authOptions?.auth === item?.auth) return isUserAuthenticated;
+    });
 
     return (
         <nav className="navbar">
@@ -56,11 +59,34 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                {!isDesktop && (
-                    <div className="">
-                        <BsCart2 />
+                {isDesktop && (
+                    <div className="nav_desktop_options_container">
+                        <ul className="nav_desktop_menu">
+                            {visibleMenuOptions?.map((menuOption) => {
+                                const { id, path, label } = menuOption;
+                                const isActivePath = path === pathname;
+                                return (
+                                    <li key={id}
+                                        onClick={() => {
+                                            navigate(path)
+                                        }}
+                                        className={`${isActivePath ? "active" : ""}`}
+                                        style={{ fontSize: "var(--fs-nav-md)" }}
+                                    >
+                                        <span>{label}</span>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+
                     </div>
                 )}
+
+                <button className="cart_button_container" onClick={()=>navigate("/cart")}>
+                    <BsCart2 />
+                    <span className="cart_item_counter">1</span>
+                </button>
+
             </div>
 
             {!isDesktop && (
@@ -82,18 +108,24 @@ const Navbar = () => {
                         </div>
 
                         <ul className="navbar__menu">
-                            <li className="border-bottom"><IoHomeOutline /> <span>Home</span></li>
-
-                            <li className="border-bottom"><RiShoppingBag2Line /><span>Shop Now</span></li>
-
-                            <li className="border-bottom"><IoCallOutline /><span>Contact us</span></li>
-
-                            <li className="border-bottom"><CgProfile /><span>Login</span></li>
-
-                            <li className=""> <IoPersonAddOutline /><span>Create Account</span></li>
-
-                            <li className=""><GoPerson /><span>Profile</span></li>
-
+                            {visibleMenuOptions?.map((menuOption, index) => {
+                                const { id, path, label, icon } = menuOption;
+                                const Icon = icon;
+                                const isLastElement = (index === (visibleMenuOptions?.length - 1));
+                                return (
+                                    <li key={id}
+                                        onClick={() => {
+                                            navigate(path)
+                                            setIsOpen(false)
+                                        }}
+                                        className={`${!isLastElement ? "border-bottom" : ""}`}
+                                        style={{ fontSize: "var(--fs-nav-sm)" }}
+                                    >
+                                        <Icon />
+                                        <span>{label}</span>
+                                    </li>
+                                )
+                            })}
                         </ul>
 
                         <div className="currency">
@@ -107,6 +139,8 @@ const Navbar = () => {
 
                 </>
             )}
+
+
 
         </nav >
     );
