@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "./layouts/PublicLayout";
 import ProfileLayout from "./layouts/ProfileLayout";
+import Register from "../features/auth/pages/Register";
+import Login from "../features/auth/pages/Login";
 
 const router = createBrowserRouter([
     {
@@ -21,9 +23,9 @@ const router = createBrowserRouter([
 
             { path: "orders", element: <h1>Orders Page</h1> },
 
-            { path: "login", element: <h1>Login Page</h1> },
+            { path: "login", element: <Login /> },
 
-            { path: "register", element: <h1>Register Page</h1> },
+            { path: "register", element: <Register /> },
 
             { path: "*", element: <h1>This page does not exist</h1> },
         ],

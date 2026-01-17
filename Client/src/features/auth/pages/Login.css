@@ -1,0 +1,33 @@
+.login-page {
+    background-color: white;
+    width: 100%;
+    min-height: calc(100vh - 82px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    gap: 2rem;
+    width: 100%;
+    max-width: 550px;
+}
+
+.login-form-container h3{
+    font-size: var(--fs-h3);
+}
+
+.login-options{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
