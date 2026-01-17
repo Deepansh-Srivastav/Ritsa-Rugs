@@ -5,8 +5,10 @@ import { RouterProvider } from "react-router-dom";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import "./styles/main.css";
 
+const CLIENT_ID = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <GoogleOAuthProvider clientId="936291696985-a0jcks1nl6ohapiat54b3ni0mis1v68d.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId={CLIENT_ID}>
     <React.StrictMode>
       <RouterProvider router={router} />
     </React.StrictMode>

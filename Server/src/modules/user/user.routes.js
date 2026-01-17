@@ -4,7 +4,7 @@ import {
     createUserController,
     updateUserDetailsController,
     getUserDetailsController,
-    softDeleteUserController
+    softDeleteUserController,
 } from "./user.controller.js";
 
 const userRouter = Router();
