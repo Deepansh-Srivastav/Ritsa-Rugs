@@ -27,6 +27,8 @@ const router = createBrowserRouter([
 
             { path: "register", element: <Register /> },
 
+            { path: "oauth-success", element: <h1>Login successful. </h1> },
+
             { path: "*", element: <h1>This page does not exist</h1> },
         ],
     },
