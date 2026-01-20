@@ -9,10 +9,15 @@ const OAuthSuccess = () => {
         const token = params.get("token");
 
         if (token) {
-            // store in memory / state manager
             window.__ACCESS_TOKEN__ = token;
             navigate("/");
-        }
+        };
+
+        if (!token) {
+            window.__ACCESS_TOKEN__ = token;
+            navigate("/login");
+        };
+        
     }, []);
 
     return <p>Logging you in…</p>;

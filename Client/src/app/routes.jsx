@@ -3,6 +3,7 @@ import PublicLayout from "./layouts/PublicLayout";
 import ProfileLayout from "./layouts/ProfileLayout";
 import Register from "../features/auth/pages/Register";
 import Login from "../features/auth/pages/Login";
+import OAuthSuccess from "../features/oauth/pages/OAuthSuccess";
 
 const router = createBrowserRouter([
     {
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
 
             { path: "register", element: <Register /> },
 
-            { path: "oauth-success", element: <h1>Login successful. </h1> },
+            { path: "oauth-success", element: <OAuthSuccess /> },
 
             { path: "*", element: <h1>This page does not exist</h1> },
         ],

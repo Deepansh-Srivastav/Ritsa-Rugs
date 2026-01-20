@@ -19,17 +19,21 @@ const userSchema = new mongoose.Schema(
             index: true,
         },
 
-        password: {
-            type: String,
-            required: true,
-            minlength: 8,
-            select: false,
-        },
+        // password: {
+        //     type: String,
+        //     required: true,
+        //     minlength: 8,
+        //     select: false,
+        // },
 
         role: {
             type: String,
             enum: ["user", "admin"],
             default: "user",
+        },
+
+        avatar: {
+            type: String,
         },
 
         // isEmailVerified: {
