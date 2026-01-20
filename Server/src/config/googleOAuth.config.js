@@ -15,5 +15,3 @@ export const googleOAuthConfig = {
         return process.env.GOOGLE_REDIRECT_URI;
     },
 };
-
-console.log(googleOAuthConfig);

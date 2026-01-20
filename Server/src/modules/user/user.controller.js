@@ -6,6 +6,7 @@ export async function createUserController(req, res, next) {
 
         res.status(201).json({
             success: true,
+            error: false,
             message: "User created successfully",
             data: userData,
         });
@@ -17,13 +18,14 @@ export async function createUserController(req, res, next) {
 
 export async function getUserDetailsController(req, res, next) {
     try {
-        const { userId } = req.params;
+        const  userId  = req.user.id;
 
-        const user = await userService.getUserById(userId);
+        const userData = await userService.getUserById(userId);
 
         res.status(200).json({
             success: true,
-            data: user,
+            error: false,
+            data: userData,
         });
     } catch (err) {
         next(err);
@@ -38,6 +40,7 @@ export async function updateUserDetailsController(req, res, next) {
 
         res.status(200).json({
             success: true,
+            error: false,
             message: "User updated successfully",
             data: user,
         });
@@ -54,6 +57,7 @@ export async function softDeleteUserController(req, res, next) {
 
         res.status(200).json({
             success: true,
+            error: false,
             message: "Account deleted successfully",
             data: user,
         });

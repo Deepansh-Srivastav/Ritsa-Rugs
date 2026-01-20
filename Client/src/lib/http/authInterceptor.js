@@ -1,9 +1,12 @@
 import { api } from "./axiosInstance";
 import { refreshAccessToken } from "./refreshToken";
+import { store } from "../../redux/store";
 
 export const setupAuthInterceptor = () => {
+
+
     api.interceptors.request.use((config) => {
-        const token = localStorage.getItem("accessToken");
+        const token = store.getState().auth.accessToken;
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -31,7 +34,8 @@ export const setupAuthInterceptor = () => {
                     return api(originalRequest);
                 } catch (err) {
                     localStorage.removeItem("accessToken");
-                    window.location.href = "/login";
+                    console.log('ERROR FORM INTERCEPTOR', err);
+                    // window.location.href = "/login";
                     return Promise.reject(err);
                 }
             }

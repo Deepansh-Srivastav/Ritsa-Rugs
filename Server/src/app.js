@@ -20,7 +20,7 @@ app.use(helmet());
 
 let type = process.env.NODE_ENV === "development" ? "dev" : "combined";
 
-app.use(morgan(type));
+app.use(morgan("dev"));
 
 const allowedOrigins = [
     process.env.CLIENT_URL,
