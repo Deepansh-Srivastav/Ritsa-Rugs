@@ -38,8 +38,6 @@ export async function handleGoogleOAuth(code) {
         `${googleOAuthConfig.tokenInfoUrl}?id_token=${id_token}`
     );
 
-    console.log('This is the data', googleUser.data);
-
     const { email, name, picture } = googleUser.data;
 
     let user = await User.findOne({ email });

@@ -1,8 +1,9 @@
 export const API_PATHS = {
     AUTH: {
         LOGIN: "/auth/login",
-        REFRESH: "/auth/refresh",
-        LOGOUT: "/auth/logout",
+    },
+    USER: {
+        GET_USER_DETAILS: "/api/v1/user/get-user-details",
     },
     RUGS: {
         GET_ALL_RUGS: "/rugs",

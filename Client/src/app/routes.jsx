@@ -4,13 +4,16 @@ import ProfileLayout from "./layouts/ProfileLayout";
 import Register from "../features/auth/pages/Register";
 import Login from "../features/auth/pages/Login";
 import OAuthSuccess from "../features/oauth/pages/OAuthSuccess";
+import Home from "../features/home/pages/Home";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <PublicLayout />,
         children: [
-            { index: true, element: <h1 id="X">Home Page</h1> },
+            // { index: true, element: <h1 id="X">Home Page</h1> },
+
+            { path: "", element:  < Home /> },
 
             { path: "about", element: <h1>About Page</h1> },
 

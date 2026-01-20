@@ -11,13 +11,17 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { BREAKPOINTS } from "../../constants/breakpoints.js";
 import useMediaQuery from "../../hooks/useMediaQuery.js";
 import { MENU_ITEMS, authOptions } from "../../config/menuConfig.js";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     const { pathname } = useLocation();
-
     const isDesktop = useMediaQuery(BREAKPOINTS.desktop);
+    const { isAuthenticated } = useSelector(state => state.auth);
+
+    console.log("isAuthenticated value is ",isAuthenticated);
+
 
     useEffect(() => {
         if (isOpen) {
@@ -32,8 +36,7 @@ const Navbar = () => {
     }, [isOpen]);
 
     const visibleMenuOptions = MENU_ITEMS?.filter((item) => {
-        const isUserAuthenticated = false;
-        // const isUserAuthenticated = true;
+        const isUserAuthenticated = isAuthenticated;
         if (authOptions?.both === item?.auth) return true;
         if (authOptions?.guest === item?.auth) return !isUserAuthenticated;
         if (authOptions?.auth === item?.auth) return isUserAuthenticated;
@@ -82,7 +85,7 @@ const Navbar = () => {
                     </div>
                 )}
 
-                <button className="cart_button_container" onClick={()=>navigate("/cart")}>
+                <button className="cart_button_container" onClick={() => navigate("/cart")}>
                     <BsCart2 />
                     <span className="cart_item_counter">1</span>
                 </button>
