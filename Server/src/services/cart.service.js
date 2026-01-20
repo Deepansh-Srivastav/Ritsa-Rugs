@@ -116,8 +116,6 @@ export const removeCartItem = async (userId, productId) => {
         (item) => item.productId.toString() === productId
     );
 
-    console.log("this is isValid - ", isValidCartItem);
-
     if (!isValidCartItem) {
         AppError("Item not found in cart", 404)
     };

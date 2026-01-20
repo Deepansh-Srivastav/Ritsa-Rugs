@@ -13,5 +13,5 @@ const processQueue = (error, token = null) => {
 };
 
 export const refreshAccessToken = async () => {
-    return api.post(API_PATHS.AUTH.REFRESH);
+    // return api.post(API_PATHS.AUTH.REFRESH);
 };

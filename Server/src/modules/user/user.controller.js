@@ -18,7 +18,7 @@ export async function createUserController(req, res, next) {
 
 export async function getUserDetailsController(req, res, next) {
     try {
-        const { userId } = req.params;
+        const  userId  = req.user.id;
 
         const userData = await userService.getUserById(userId);
 

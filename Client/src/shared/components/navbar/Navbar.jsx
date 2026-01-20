@@ -20,9 +20,6 @@ const Navbar = () => {
     const isDesktop = useMediaQuery(BREAKPOINTS.desktop);
     const { isAuthenticated } = useSelector(state => state.auth);
 
-    console.log("isAuthenticated value is ",isAuthenticated);
-
-
     useEffect(() => {
         if (isOpen) {
             document.body.classList.add("no-scroll");

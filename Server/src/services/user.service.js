@@ -41,6 +41,11 @@ async function createUser({ name, email, password }) {
 };
 
 async function getUserById(userId) {
+
+    console.log(userId);
+    console.log(typeof (userId));
+
+
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         AppError("Invalid user id", 400);
     }
@@ -53,12 +58,13 @@ async function getUserById(userId) {
 
     return {
         id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        isActive: user.isActive,
-        lastLoginAt: user.lastLoginAt,
-        createdAt: user.createdAt,
+        name: user?.name,
+        email: user?.email,
+        avatar: user?.avatar,
+        role: user?.role,
+        isActive: user?.isActive,
+        lastLoginAt: user?.lastLoginAt,
+        createdAt: user?.createdAt,
     };
 };
 
