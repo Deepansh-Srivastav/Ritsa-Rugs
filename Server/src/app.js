@@ -14,11 +14,7 @@ import addressRouter from "./modules/address/address.routes.js"
 import productRouter from "./modules/product/product.routes.js";
 import authRouter from "./modules/authentication/authentication.routes.js";
 
-// dotenv.config();
-
 const app = express();
-
-console.log("value is ", process.env.NODE_ENV);
 
 app.use(helmet());
 

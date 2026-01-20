@@ -34,12 +34,13 @@ export async function handleGoogleOAuth(code) {
 
     const { id_token } = tokenResponse.data;
 
-    // Verify ID token
     const googleUser = await axios.get(
         `${googleOAuthConfig.tokenInfoUrl}?id_token=${id_token}`
     );
 
-    const { email, name } = googleUser.data;
+    console.log('This is the data', googleUser.data);
+
+    const { email, name, picture } = googleUser.data;
 
     let user = await User.findOne({ email });
 
@@ -47,6 +48,7 @@ export async function handleGoogleOAuth(code) {
         user = await User.create({
             name,
             email,
+            avatar: picture,
             authProvider: "google",
         });
     }
