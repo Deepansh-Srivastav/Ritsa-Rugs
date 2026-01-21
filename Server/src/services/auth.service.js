@@ -90,3 +90,20 @@ export async function logoutUser(refreshToken) {
     user.refreshToken = null;
     await user.save();
 };
+
+export async function refreshToken(refreshToken) {
+    try {
+        if (!refreshToken) {
+            AppError("Token not provided", 400)
+        }
+
+        const userDetail = await User.findOne({refreshToken});
+
+        // if (!user) {
+            
+        // }
+
+    } catch (error) {
+
+    }
+}

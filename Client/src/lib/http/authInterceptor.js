@@ -36,8 +36,8 @@ export const setupAuthInterceptor = () => {
                     console.log('ERROR FORM INTERCEPTOR', err);
                     // window.location.href = "/login";
                     return Promise.reject(err);
-                }
-            }
+                };
+            };
 
             return Promise.reject(error);
         }

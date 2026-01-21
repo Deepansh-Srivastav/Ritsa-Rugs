@@ -5,7 +5,7 @@ export function extractAccessToken(req) {
 
     if (req.cookies && req.cookies.accessToken) {
         return req.cookies.accessToken;
-    }
+    };
 
     const authHeader = req.headers.authorization;
     
