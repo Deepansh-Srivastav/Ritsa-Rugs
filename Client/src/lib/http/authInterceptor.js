@@ -2,6 +2,7 @@ import { api } from "./axiosInstance";
 import { refreshAccessToken } from "./refreshToken";
 import { store } from "../../redux/store";
 import { setAccessToken, logOut } from "../../redux/features/authSlice";
+import { resetUserDetail } from "../../redux/features/userDetailSlice";
 
 export const setupAuthInterceptor = () => {
 
@@ -24,16 +25,21 @@ export const setupAuthInterceptor = () => {
                 originalRequest._retry = true;
 
                 try {
-                    const { data } = await refreshAccessToken();
-                    store.dispatch(setAccessToken(data.accessToken));
+                    const accessToken = await refreshAccessToken();
+                    
+                    console.log('Access token is - ', accessToken);
+                    
+                    console.log('originalRequest is - ', originalRequest);
+
+                    store.dispatch(setAccessToken(accessToken));
 
                     originalRequest.headers.Authorization =
-                        `Bearer ${data.accessToken}`;
+                        `Bearer ${accessToken}`;
 
                     return api(originalRequest);
                 } catch (err) {
                     store.dispatch(logOut());
-                    console.log('ERROR FORM INTERCEPTOR', err);
+                    store.dispatch(resetUserDetail());
                     // window.location.href = "/login";
                     return Promise.reject(err);
                 };

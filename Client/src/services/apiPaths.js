@@ -12,4 +12,7 @@ export const API_PATHS = {
     USER: {
         GET_USER_DETAILS: `${routePrefix?.user}/get-user-details`,
     },
+    PRODUCTS: {
+        GET_ALL_PRODUCTS: `${routePrefix?.user}/get-all-products`,
+    },
 };
