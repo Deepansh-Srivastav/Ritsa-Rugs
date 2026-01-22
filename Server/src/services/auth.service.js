@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import AppError from "../utils/AppError.js";
 import User from "../modules/user/user.model.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/token.generator.js";
+import { verifyToken } from "../utils/token.utils.js";
 
 export async function validateAuthenticatedUser(userId) {
     const user = await User.findById(userId);
@@ -92,18 +93,28 @@ export async function logoutUser(refreshToken) {
 };
 
 export async function refreshToken(refreshToken) {
-    try {
-        if (!refreshToken) {
-            AppError("Token not provided", 400)
-        }
 
-        const userDetail = await User.findOne({refreshToken});
-
-        // if (!user) {
-            
-        // }
-
-    } catch (error) {
-
+    if (!refreshToken) {
+        AppError("Token not provided", 400)
     }
-}
+
+    verifyToken(refreshToken, "refreshToken");
+
+    const userDetail = await User.findOne({ refreshToken });
+
+    if (!userDetail) {
+        AppError("Refresh token revoked or invalid.");
+    };
+
+    const payload = {
+        userId: userDetail._id,
+        role: userDetail.role
+    };
+
+    const accessToken = generateAccessToken(payload);
+
+    return {
+        accessToken
+    };
+
+};
