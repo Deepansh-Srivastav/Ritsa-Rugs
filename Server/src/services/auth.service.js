@@ -81,7 +81,10 @@ export async function logoutUser(refreshToken) {
         AppError("No active session", 400);
     }
 
+    console.log('Refresh token recieved in the logout controller.',);
     const user = await User.findOne({ refreshToken });
+
+    console.log('user',user);
 
     if (!user) {
         // token already invalidated → idempotent logout

@@ -122,6 +122,11 @@ export async function refreshAccessTokenController(req, res, next) {
         });
     } catch (error) {
         await logoutUser(token);
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
         next(error)
     };
 };
