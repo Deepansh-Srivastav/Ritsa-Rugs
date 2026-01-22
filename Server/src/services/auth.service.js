@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import AppError from "../utils/AppError.js";
 import User from "../modules/user/user.model.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/token.generator.js";
+import { verifyToken } from "../utils/token.utils.js";
 
 export async function validateAuthenticatedUser(userId) {
     const user = await User.findById(userId);
@@ -80,7 +81,10 @@ export async function logoutUser(refreshToken) {
         AppError("No active session", 400);
     }
 
+    console.log('Refresh token recieved in the logout controller.',);
     const user = await User.findOne({ refreshToken });
+
+    console.log('user',user);
 
     if (!user) {
         // token already invalidated → idempotent logout
@@ -89,4 +93,31 @@ export async function logoutUser(refreshToken) {
 
     user.refreshToken = null;
     await user.save();
+};
+
+export async function refreshToken(refreshToken) {
+
+    if (!refreshToken) {
+        AppError("Token not provided", 400)
+    }
+
+    verifyToken(refreshToken, "refreshToken");
+
+    const userDetail = await User.findOne({ refreshToken });
+
+    if (!userDetail) {
+        AppError("Refresh token revoked or invalid.");
+    };
+
+    const payload = {
+        userId: userDetail._id,
+        role: userDetail.role
+    };
+
+    const accessToken = generateAccessToken(payload);
+
+    return {
+        accessToken
+    };
+
 };

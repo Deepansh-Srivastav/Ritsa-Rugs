@@ -1,4 +1,4 @@
-import { loginUser, logoutUser } from "../../services/auth.service.js";
+import { loginUser, logoutUser, refreshToken } from "../../services/auth.service.js";
 import { handleGoogleOAuth } from "../../services/googleOAuth.service.js";
 import { googleOAuthConfig } from "../../config/googleOAuth.config.js";
 
@@ -10,7 +10,7 @@ export const loginUserController = async (req, res, next) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000 
+            maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
         res.status(200).json({
@@ -70,8 +70,10 @@ export const googleCallbackController = async (req, res, next) => {
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
+        const URL = process.env.NODE_ENV === "production" ? process.env.PROD_URL : process.env.DEV_URL
+
         res.redirect(
-            `${process.env.CLIENT_URL}/oauth-success?token=${accessToken}`
+            `${URL}/oauth-success?token=${accessToken}`
         );
     } catch (err) {
         next(err);
@@ -90,11 +92,41 @@ export async function googleOAuthController(req, res, next) {
             sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
+        const URL = process.env.NODE_ENV === "production" ? process.env.PROD_URL : process.env.DEV_URL
 
         res.redirect(
-            `${process.env.CLIENT_URL}/oauth-success?token=${accessToken}`
+            `${URL}/oauth-success?token=${accessToken}`
         );
     } catch (err) {
         next(err);
+    };
+};
+
+export async function refreshAccessTokenController(req, res, next) {
+    let token = null;
+
+    try {
+        token = req.cookies.refreshToken;
+
+        console.log('refresh token is ', token);
+
+        const { accessToken } = await refreshToken(token);
+
+        res.status(200).json({
+            error: false,
+            success: true,
+            message: "access token generated successfully",
+            data: {
+                accessToken
+            }
+        });
+    } catch (error) {
+        await logoutUser(token);
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
+        next(error)
     };
 };

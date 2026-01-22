@@ -23,8 +23,8 @@ let type = process.env.NODE_ENV === "development" ? "dev" : "combined";
 app.use(morgan("dev"));
 
 const allowedOrigins = [
-    process.env.CLIENT_URL,
-    "http://localhost:5173"
+    "https://ritsa-rugs.vercel.app",
+    "http://localhost:5173",
 ];
 
 app.use(
@@ -47,8 +47,8 @@ app.use(
 app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
 
-app.use("/api/v1/user", userRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", userRouter);
 app.use("/api/v1/user", addressRouter);
 app.use("/api/v1/user", productRouter);
 app.use("/api/v1/admin", adminRouter);
