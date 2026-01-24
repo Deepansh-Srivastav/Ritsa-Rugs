@@ -1,5 +1,5 @@
 import Address from "../modules/address/address.model.js";
-import AppError from "../utils/appError.js";
+import AppError from "../utils/AppError.js";
 import ValidateMongoId from "../utils/ValidateMongo_Id.js";
 
 export async function createAddress(userId, data) {
