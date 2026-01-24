@@ -9,7 +9,7 @@ export const loginUserController = async (req, res, next) => {
         res.cookie("refreshToken", result.refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
@@ -33,7 +33,7 @@ export const logoutUserController = async (req, res, next) => {
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
         });
 
         res.status(200).json({
@@ -67,7 +67,7 @@ export const googleCallbackController = async (req, res, next) => {
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
@@ -90,7 +90,7 @@ export async function googleOAuthController(req, res, next) {
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         const URL = process.env.NODE_ENV === "production" ? process.env.PROD_URL : process.env.DEV_URL
@@ -126,7 +126,7 @@ export async function refreshAccessTokenController(req, res, next) {
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
         });
         next(error)
     };
