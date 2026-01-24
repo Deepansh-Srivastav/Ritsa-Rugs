@@ -4,9 +4,9 @@ export function generateAccessToken(payload) {
     return jwt.sign(
         payload,
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "3m" }
+        { expiresIn: "5m" }
     );
-}
+};
 
 export function generateRefreshToken(payload) {
     return jwt.sign(
@@ -14,4 +14,4 @@ export function generateRefreshToken(payload) {
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "2d" }
     );
-}
+};

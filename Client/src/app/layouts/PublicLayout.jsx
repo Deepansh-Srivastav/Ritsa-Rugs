@@ -13,19 +13,15 @@ const PublicLayout = () => {
 
         const accessToken = await refreshAccessToken();
 
-        console.log("Access token is ", accessToken);
-
-
         if (accessToken) {
             return dispatch(setAccessToken(accessToken));
-        }
-
+        };
         dispatch(logOut());
     };
 
      useEffect(() => {
         handleRefresh();
-      }, [])
+      }, []);
 
     return (
         <main style={{ maxHeight: "100vh" }}>
