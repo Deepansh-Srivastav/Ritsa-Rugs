@@ -5,7 +5,9 @@ import {
     IoPersonAddOutline,
     CgProfile,
     GoPerson,
+    CiLogout,
 } from "../icons/icons.js";
+import logoutService from "../../services/logoutService.js";
 
 export const authOptions = {
     both: "both",
@@ -57,5 +59,14 @@ export const MENU_ITEMS = [
         icon: GoPerson,
         path: "/profile",
         auth: authOptions?.auth,
+    },
+
+    {
+        id: "logout",
+        label: "Log Out",
+        icon: CiLogout,
+        path: "",
+        auth: authOptions?.auth,
+        action: () => { logoutService() }
     },
 ];

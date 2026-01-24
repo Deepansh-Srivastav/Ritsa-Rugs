@@ -65,10 +65,12 @@ const Navbar = () => {
                             {visibleMenuOptions?.map((menuOption) => {
                                 const { id, path, label } = menuOption;
                                 const isActivePath = path === pathname;
+                                const action = menuOption?.action || null
                                 return (
                                     <li key={id}
                                         onClick={() => {
                                             navigate(path)
+                                            action()
                                         }}
                                         className={`${isActivePath ? "active" : ""}`}
                                         style={{ fontSize: "var(--fs-nav-md)" }}

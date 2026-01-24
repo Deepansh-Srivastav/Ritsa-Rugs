@@ -7,7 +7,8 @@ const routePrefix = {
 
 export const API_PATHS = {
     AUTH: {
-        REFRESH_TOKEN: `${routePrefix?.auth}/refresh-token`
+        REFRESH_TOKEN: `${routePrefix?.auth}/refresh-token`,
+        LOGOUT_USER: `${routePrefix?.auth}/logout`
     },
     USER: {
         GET_USER_DETAILS: `${routePrefix?.user}/get-user-details`,

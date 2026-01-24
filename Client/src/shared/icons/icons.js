@@ -30,6 +30,12 @@ import { FaIndianRupeeSign } from "react-icons/fa6";
 
 
 
+// Rupee symbol
+import { CiLogout } from "react-icons/ci";
+
+
+
+
 
 export {
     GiHamburgerMenu,
@@ -42,5 +48,6 @@ export {
     CgProfile,
     GoPerson,
     FaIndianRupeeSign,
+    CiLogout,
     
 };
