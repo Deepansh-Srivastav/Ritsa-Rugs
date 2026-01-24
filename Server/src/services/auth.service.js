@@ -81,7 +81,7 @@ export async function logoutUser(refreshToken) {
         AppError("No active session", 400);
     }
 
-    console.log('Refresh token recieved in the logout controller.',);
+    console.log('Refresh token recieved in the logout controller.', refreshToken);
     const user = await User.findOne({ refreshToken });
 
     console.log('user', user);
@@ -101,7 +101,9 @@ export async function refreshToken(refreshToken) {
         AppError("Token not provided", 400)
     }
 
-    verifyToken(refreshToken, "refreshToken");
+    console.log("VERIFY TOKEN IS - ", refreshToken);
+
+    const c = verifyToken(refreshToken, "refreshToken");
 
     const userDetail = await User.findOne({ refreshToken });
 
