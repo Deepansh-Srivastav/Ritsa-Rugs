@@ -12,7 +12,6 @@ const userDetailSlice = createSlice({
     initialState,
     reducers: {
         setUserDetail(state, action) {
-            
             const { name, email, avatar, lastLoginAt } = action?.payload || {};
             state.userName = name;
             state.email = email;
