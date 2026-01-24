@@ -5,8 +5,10 @@ import axios from "axios"
 
 const GoogleOAuth = ({ url }) => {
 
+    const URL = import.meta.env.VITE_GOOGLE_REDIRECT_URL
+
     const googleResponse = async () => {
-        window.location.href = "http://localhost:8080/api/v1/auth/google";
+        window.location.href = URL;
     };
 
     // const googleLogin = useGoogleLogin({
