@@ -7,7 +7,7 @@ export async function adminLoginController(req, res, next) {
         res.cookie("refreshToken", result.refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
