@@ -5,12 +5,16 @@ import { googleOAuthConfig } from "../../config/googleOAuth.config.js";
 export const loginUserController = async (req, res, next) => {
     try {
         const result = await loginUser(req.body);
+        const isProd = process.env.NODE_ENV === "production";
+
+        console.log("IS_PROD_IS_ =", isProd);
+
 
         res.cookie("refreshToken", result.refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
         res.status(200).json({
@@ -33,7 +37,8 @@ export const logoutUserController = async (req, res, next) => {
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
         res.status(200).json({
@@ -67,7 +72,7 @@ export const googleCallbackController = async (req, res, next) => {
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
+            sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
