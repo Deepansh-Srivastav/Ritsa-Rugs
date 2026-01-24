@@ -10,23 +10,24 @@ const OAuthSuccess = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    async function fetchUserDetail() {
-        const res = await oauthSuccess();
-        const response = res?.data
+    // async function fetchUserDetail() {
+    //     const res = await oauthSuccess();
+    //     const response = res?.data
 
-        if (response && response?.error === false && response?.success === true && response?.data) {
-            dispatch(setUserDetail(response?.data));
-            navigate("/");
-            return;
-        };
-        navigate("/login");
-    };
+    //     if (response && response?.error === false && response?.success === true && response?.data) {
+    //         dispatch(setUserDetail(response?.data));
+    //         navigate("/");
+    //         return;
+    //     };
+    //     navigate("/login");
+    // };
 
     useEffect(() => {
         const token = params.get("token");
         if (token) {
             dispatch(setAccessToken(token));
-            fetchUserDetail();
+            // fetchUserDetail();
+            navigate("/");
         };
 
         if (!token) {

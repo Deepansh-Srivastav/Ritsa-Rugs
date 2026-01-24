@@ -38,6 +38,7 @@ export const logoutUserController = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
+            error: false,
             message: "Logged out successfully",
         });
     } catch (err) {
