@@ -19,7 +19,9 @@
 }
 
 .navbar__logo img {
-  max-width: 100px;
+  max-width: 160px;
+  /* background-color: red; */
+  padding: .3rem;
   cursor: pointer;
 }
 
