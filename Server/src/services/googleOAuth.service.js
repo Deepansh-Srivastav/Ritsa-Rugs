@@ -1,6 +1,6 @@
 import axios from "axios";
 import qs from "qs";
-import AppError from "../utils/appError.js";
+import AppError from "../utils/AppError.js";
 import User from "../modules/user/user.model.js";
 import {
     generateAccessToken,
