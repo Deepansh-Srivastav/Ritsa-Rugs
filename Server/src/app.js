@@ -40,7 +40,7 @@ app.use(
     "/api",
     rateLimit({
         windowMs: 15 * 60 * 1000,
-        max: 99,
+        max: 999,
     })
 );
 

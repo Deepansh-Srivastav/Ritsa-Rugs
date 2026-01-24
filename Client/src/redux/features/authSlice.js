@@ -11,11 +11,13 @@ const authSlice = createSlice({
     reducers: {
         setAccessToken(state, action) {
             state.accessToken = action?.payload;
-            state.isAuthenticated = true;
+            if (action?.payload.length > 0) {
+                state.isAuthenticated = true;
+            };
         },
         logOut(state) {
             state.accessToken = null;
-            state.isAuthenticated = null;
+            state.isAuthenticated = false;
         }
     }
 });

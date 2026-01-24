@@ -20,6 +20,7 @@
 
 .navbar__logo img {
   max-width: 100px;
+  cursor: pointer;
 }
 
 .navbar__menu-btn {
