@@ -84,7 +84,7 @@ export async function logoutUser(refreshToken) {
     console.log('Refresh token recieved in the logout controller.',);
     const user = await User.findOne({ refreshToken });
 
-    console.log('user',user);
+    console.log('user', user);
 
     if (!user) {
         // token already invalidated → idempotent logout
