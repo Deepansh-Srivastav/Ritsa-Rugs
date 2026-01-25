@@ -1,21 +1,14 @@
 import { loginUser, logoutUser, refreshToken } from "../../services/auth.service.js";
 import { handleGoogleOAuth } from "../../services/googleOAuth.service.js";
 import { googleOAuthConfig } from "../../config/googleOAuth.config.js";
+import { removeItemFromCookie, setItemInCookie } from "../../utils/cookie.utils.js";
 
 export const loginUserController = async (req, res, next) => {
     try {
         const result = await loginUser(req.body);
         const isProd = process.env.NODE_ENV === "production";
 
-        console.log("IS_PROD_IS_ =", isProd);
-
-
-        res.cookie("refreshToken", result.refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        setItemInCookie(res, "refreshToken", result.refreshToken);
 
         res.status(200).json({
             success: true,
@@ -34,12 +27,7 @@ export const logoutUserController = async (req, res, next) => {
 
         await logoutUser(refreshToken);
 
-        res.clearCookie("refreshToken", {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        removeItemFromCookie(res, "refreshToken");
 
         res.status(200).json({
             success: true,
@@ -69,12 +57,7 @@ export const googleCallbackController = async (req, res, next) => {
         const { accessToken, refreshToken } =
             await handleGoogleOAuth(code);
 
-        res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        setItemInCookie(res, "refreshToken", refreshToken);
 
         const URL = process.env.NODE_ENV === "production" ? process.env.PROD_URL : process.env.DEV_URL
 
@@ -92,12 +75,8 @@ export async function googleOAuthController(req, res, next) {
 
         const { accessToken, refreshToken } = await handleGoogleOAuth(code);
 
-        res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        setItemInCookie(res, "refreshToken", refreshToken);
+
         const URL = process.env.NODE_ENV === "production" ? process.env.PROD_URL : process.env.DEV_URL
 
         res.redirect(
@@ -114,8 +93,6 @@ export async function refreshAccessTokenController(req, res, next) {
     try {
         token = req.cookies.refreshToken;
 
-        console.log('refresh token is ', token);
-
         const { accessToken } = await refreshToken(token);
 
         res.status(200).json({
@@ -127,12 +104,11 @@ export async function refreshAccessTokenController(req, res, next) {
             }
         });
     } catch (error) {
+
         await logoutUser(token);
-        res.clearCookie("refreshToken", {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
-        });
+
+        removeItemFromCookie(res, "refreshToken");
+
         next(error)
     };
 };

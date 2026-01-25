@@ -27,6 +27,10 @@ export const setupAuthInterceptor = () => {
                 try {
                     const accessToken = await refreshAccessToken();
 
+                    console.log('Access token is - ', accessToken);
+
+                    console.log('originalRequest is - ', originalRequest);
+
                     store.dispatch(setAccessToken(accessToken));
 
                     originalRequest.headers.Authorization =
