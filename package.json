@@ -4,6 +4,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "npm run dev --prefix Client",
+    "host": "npm run dev --prefix Client -- --host",
     "server": "npm run dev --prefix Server"
   }
 }
