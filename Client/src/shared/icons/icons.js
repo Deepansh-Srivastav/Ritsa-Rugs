@@ -28,10 +28,12 @@ import { GoPerson } from "react-icons/go";
 // Rupee symbol
 import { FaIndianRupeeSign } from "react-icons/fa6";
 
-
-
 // Rupee symbol
 import { CiLogout } from "react-icons/ci";
+
+// Bag symbol
+import { IoBagHandleOutline } from "react-icons/io5";
+
 
 
 
@@ -49,5 +51,6 @@ export {
     GoPerson,
     FaIndianRupeeSign,
     CiLogout,
+    IoBagHandleOutline,
     
 };
