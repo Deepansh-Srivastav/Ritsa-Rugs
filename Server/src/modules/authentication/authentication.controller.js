@@ -7,9 +7,6 @@ export const loginUserController = async (req, res, next) => {
         const result = await loginUser(req.body);
         const isProd = process.env.NODE_ENV === "production";
 
-        console.log("IS_PROD_IS_ =", isProd);
-
-
         res.cookie("refreshToken", result.refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
@@ -114,8 +111,6 @@ export async function refreshAccessTokenController(req, res, next) {
     try {
         token = req.cookies.refreshToken;
 
-        console.log('refresh token is ', token);
-
         const { accessToken } = await refreshToken(token);
 
         res.status(200).json({
@@ -127,12 +122,20 @@ export async function refreshAccessTokenController(req, res, next) {
             }
         });
     } catch (error) {
+
         await logoutUser(token);
+
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "none",
         });
+        // res.clearCookie("refreshToken", {
+        //     httpOnly: true,
+        //     secure: process.env.NODE_ENV === "production",
+        //     sameSite: "strict",
+        //     maxAge: 7 * 24 * 60 * 60 * 1000,
+        // });
         next(error)
     };
 };

@@ -42,10 +42,6 @@ async function createUser({ name, email, password }) {
 
 async function getUserById(userId) {
 
-    console.log(userId);
-    console.log(typeof (userId));
-
-
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         AppError("Invalid user id", 400);
     }
