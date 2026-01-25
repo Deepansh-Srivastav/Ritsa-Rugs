@@ -34,7 +34,7 @@
 
 .carousel-text h2 {
     color: var(--text-white);
-    font-size: var(--fs-h3);
+    font-size: var(--fs-h2);
     line-height: 1.25;
     letter-spacing: 0.3px;
     margin: 0;
@@ -90,7 +90,7 @@
         bottom: 6rem;
         left: 4rem;
         padding: 2rem;
-        
+        border-width: 6px;
     }
 
     .carousel-text h2 {

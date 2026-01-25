@@ -4,7 +4,8 @@ import {
     GiHamburgerMenu,
     IoMdClose,
     BsCart2,
-    FaIndianRupeeSign
+    FaIndianRupeeSign,
+    IoBagHandleOutline
 } from "../../icons/icons.js";
 import { ritsaRugsLogo } from "../../images/images.js";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -85,7 +86,8 @@ const Navbar = () => {
                 )}
 
                 <button className="cart_button_container" onClick={() => navigate("/cart")}>
-                    <BsCart2 />
+                    <IoBagHandleOutline />
+                    {/* <BsCart2 /> */}
                     <span className="cart_item_counter">1</span>
                 </button>
 
