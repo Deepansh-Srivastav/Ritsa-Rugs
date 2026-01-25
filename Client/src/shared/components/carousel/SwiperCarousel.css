@@ -14,7 +14,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    filter: blur(2px) brightness(0.48);
+    filter: blur(1px) brightness(0.48);
 }
 
 .carousel-text {
@@ -23,21 +23,17 @@
     left: 01rem;
     max-width: 600px;
     z-index: 1;
-
-    padding: 1.3rem 1.3rem 1.3rem 1.3rem;
+    padding: 1.3rem 1.3rem 1.3rem 0.7rem;
     display: flex;
     justify-content: center;
     align-items: center;
     border-left: 4px solid var(--text-white);
-    border-right: 4px solid var(--text-white);
     backdrop-filter: blur(2px);
-    border-top-left-radius: 50px;
-    border-top-right-radius: 50px;
+    border-radius: 5px;
 }
 
 .carousel-text h2 {
     color: var(--text-white);
-    /* color: #ffffff; */
     font-size: var(--fs-h3);
     line-height: 1.25;
     letter-spacing: 0.3px;
@@ -50,17 +46,6 @@
     animation: slideUpFade 0.8s ease forwards;
 }
 
-@keyframes slideUpFade {
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
 .mySwiper .swiper-pagination {
     bottom: 16px;
@@ -87,10 +72,7 @@
         height: 60vh;
     }
 
-    .carousel-text h2 {
-        position: absolute;
-        font-size: var(--fs-h1);
-        color: white;
+    .carousel-text {
         bottom: 3rem;
         left: 2rem;
     }
@@ -101,6 +83,32 @@
 
     .mySwiper,
     .mySwiper .swiper-slide {
-        height: 95vh;
+        height: calc(100vh - 63px);
+    }
+
+    .carousel-text {
+        bottom: 6rem;
+        left: 4rem;
+        padding: 2rem;
+        
+    }
+
+    .carousel-text h2 {
+        font-size: var(--fs-h2);
+        line-height: 1.8;
+        letter-spacing: 1px;
+    }
+}
+
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
