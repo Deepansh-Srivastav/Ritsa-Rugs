@@ -1,55 +1,98 @@
-import { createBrowserRouter } from "react-router-dom";
-import PublicLayout from "./layouts/PublicLayout";
-import ProfileLayout from "./layouts/ProfileLayout";
-import Register from "../features/auth/pages/Register";
-import Login from "../features/auth/pages/Login";
-import OAuthSuccess from "../features/oauth/pages/OAuthSuccess";
-import Home from "../features/home/pages/Home";
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { ProtectedRoute } from '@/components/ui/ProtectedRoute';
 
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <PublicLayout />,
-        children: [
-            // { index: true, element: <h1 id="X">Home Page</h1> },
+// Lazy load pages for better performance
+import { lazy, Suspense } from 'react';
+import { Spinner } from '@/components/ui';
 
-            { path: "", element:  < Home /> },
+// Auth Pages
+const LoginPage = lazy(() => import('@/features/auth/pages/Login'));
+const RegisterPage = lazy(() => import('@/features/auth/pages/Register'));
 
-            { path: "about", element: <h1>About Page</h1> },
+// Home
+const HomePage = lazy(() => import('@/features/home/pages/Home'));
 
-            { path: "contact", element: <h1>Contact Page</h1> },
+// Products
+const ProductListPage = lazy(() => import('@/features/products/pages/ProductList'));
+const ProductDetailsPage = lazy(() => import('@/features/products/pages/ProductDetails'));
 
-            { path: "rugs", element: <h1>Rugs List Page</h1> },
+// Cart & Checkout
+const CartPage = lazy(() => import('@/features/cart/pages/Cart'));
+const CheckoutPage = lazy(() => import('@/features/checkout/pages/Checkout'));
+const OrderSuccessPage = lazy(() => import('@/features/checkout/pages/OrderSuccess'));
 
-            { path: "rugs/:rugId", element: <h1>Rug Details Page</h1> },
+// User
+const ProfilePage = lazy(() => import('@/features/user/pages/Profile'));
+const OrdersPage = lazy(() => import('@/features/user/pages/Orders'));
+const AddressesPage = lazy(() => import('@/features/user/pages/Addresses'));
 
-            { path: "cart", element: <h1>Cart Page</h1> },
+// Wishlist
+const WishlistPage = lazy(() => import('@/features/wishlist/pages/Wishlist'));
 
-            { path: "orders", element: <h1>Orders Page</h1> },
+const LoadingFallback = () => <Spinner fullScreen />;
 
-            { path: "login", element: <Login /> },
+const AppRoutes = () => {
+    return (
+        <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<HomePage />} />
+                <Route path="/products" element={<ProductListPage />} />
+                <Route path="/products/:id" element={<ProductDetailsPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/wishlist" element={<WishlistPage />} />
 
-            { path: "register", element: <Register /> },
+                {/* Auth Routes */}
+                <Route path="/auth/login" element={<LoginPage />} />
+                <Route path="/auth/register" element={<RegisterPage />} />
 
-            { path: "oauth-success", element: <OAuthSuccess /> },
+                {/* Protected Routes */}
+                <Route
+                    path="/checkout"
+                    element={
+                        <ProtectedRoute>
+                            <CheckoutPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/order-success/:orderId"
+                    element={
+                        <ProtectedRoute>
+                            <OrderSuccessPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <ProfilePage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/orders"
+                    element={
+                        <ProtectedRoute>
+                            <OrdersPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/addresses"
+                    element={
+                        <ProtectedRoute>
+                            <AddressesPage />
+                        </ProtectedRoute>
+                    }
+                />
 
-            { path: "*", element: <h1>This page does not exist</h1> },
-        ],
-    },
+                {/* 404 Page */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+        </Suspense>
+    );
+};
 
-    {
-        path: "/profile",
-        element: <ProfileLayout />,
-        children: [
-            { index: true, element: <h1>Profile Page</h1> },
-
-            { path: "address", element: <h1>Address Page</h1> },
-
-            { path: "orders", element: <h1>Profile Orders Page</h1> },
-
-            { path: "*", element: <h1>This page does not exist</h1> },
-        ],
-    },
-]);
-
-export default router;
+export default AppRoutes;
