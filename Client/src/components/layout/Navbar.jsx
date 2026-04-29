@@ -1,171 +1,280 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FiMenu, FiX, FiSearch, FiUser, FiShoppingCart, FiHeart } from 'react-icons/fi';
-import { useAuthStore } from '@/store/authStore';
-import { useCartStore } from '@/store/cartStore';
-import { useWishlistStore } from '@/store/wishlistStore';
-import './Navbar.scss';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import {
+  FiMenu,
+  FiX,
+  FiSearch,
+  FiUser,
+  FiShoppingCart,
+  FiChevronDown,
+  FiChevronUp,
+} from 'react-icons/fi';
+import { ritsaRugsLogo } from '@/shared/images/images';
+import styles from './Navbar.module.scss';
+
+const NAV_LINKS = [
+  { label: 'Home', path: '/' },
+  { label: 'Shop', path: '/products' },
+  {
+    label: 'Categories',
+    path: '/products',
+    children: [
+      { label: 'Living Room', path: '/products?category=living' },
+      { label: 'Bedroom', path: '/products?category=bedroom' },
+      { label: 'Dining Room', path: '/products?category=dining' },
+      { label: 'Outdoor', path: '/products?category=outdoor' },
+      { label: 'Kids Room', path: '/products?category=kids' },
+    ],
+  },
+  { label: 'About', path: '/about' },
+  { label: 'Contact', path: '/contact' },
+];
+
+const CART_COUNT = 0;
 
 export const Navbar = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
+  const location = useLocation();
 
-    const navigate = useNavigate();
-    const user = useAuthStore((state) => state.user);
-    const logout = useAuthStore((state) => state.logout);
-    const cartCount = useCartStore((state) => state.getItemCount());
-    const wishlistCount = useWishlistStore((state) => state.getItemCount());
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryOpen, setCategoryOpen] = useState(false);
+  const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-    const handleLogout = () => {
-        logout();
-        navigate('/auth/login');
+  const categoryRef = useRef(null);
+  const searchInputRef = useRef(null);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setSearchOpen(false);
+    setMobileCategoryOpen(false);
+  }, [location.pathname]);
+
+  // Detect scroll for shadow
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close desktop dropdown on outside click
+  useEffect(() => {
+    const onClickOutside = (e) => {
+      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
+        setCategoryOpen(false);
+      }
     };
+    document.addEventListener('mousedown', onClickOutside);
+    return () => document.removeEventListener('mousedown', onClickOutside);
+  }, []);
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
-            setSearchQuery('');
-            setIsSearchOpen(false);
-        }
-    };
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileMenuOpen]);
 
-    return (
-        <nav className="navbar">
-            <div className="navbar__container">
-                {/* Logo */}
-                <Link to="/" className="navbar__logo">
-                    <span className="navbar__logo-text">Ritsa Rugs</span>
+  // Auto-focus mobile search
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) searchInputRef.current.focus();
+  }, [searchOpen]);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      setSearchQuery('');
+      setSearchOpen(false);
+    }
+  };
+
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
+  };
+
+  const closeMobile = () => setMobileMenuOpen(false);
+
+  return (
+    <nav
+      className={`${styles.navbar} ${scrolled ? styles.navbarScrolled : ''}`}
+      id="main-navbar"
+    >
+      <div className={styles.container}>
+        {/* ── Logo ── */}
+        <Link to="/" className={styles.logo} id="navbar-logo">
+          <img src={ritsaRugsLogo} alt="Ritsa Rugs" className={styles.logoImg} />
+          {/* <span className={styles.logoText}>Ritsa Rugs</span> */}
+        </Link>
+
+        {/* ── Center Nav (desktop) ── */}
+        <ul className={styles.nav}>
+          {NAV_LINKS.map((link) =>
+            link.children ? (
+              <li key={link.label} className={styles.navItem} ref={categoryRef}>
+                <button
+                  type="button"
+                  className={`${styles.navLink} ${categoryOpen ? styles.navLinkActive : ''}`}
+                  onClick={() => setCategoryOpen((p) => !p)}
+                  aria-expanded={categoryOpen}
+                  aria-haspopup="true"
+                  id="navbar-categories-toggle"
+                >
+                  {link.label}
+                  {categoryOpen
+                    ? <FiChevronUp className={styles.chevron} />
+                    : <FiChevronDown className={styles.chevron} />
+                  }
+                </button>
+
+                <ul
+                  className={`${styles.dropdown} ${categoryOpen ? styles.dropdownOpen : ''}`}
+                  role="menu"
+                >
+                  {link.children.map((child) => (
+                    <li key={child.label} role="menuitem">
+                      <Link
+                        to={child.path}
+                        className={styles.dropdownItem}
+                        onClick={() => setCategoryOpen(false)}
+                      >
+                        {child.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <li key={link.label} className={styles.navItem}>
+                <Link
+                  to={link.path}
+                  className={`${styles.navLink} ${isActive(link.path) ? styles.navLinkActive : ''}`}
+                >
+                  {link.label}
                 </Link>
+              </li>
+            )
+          )}
+        </ul>
 
-                {/* Search Bar (Desktop) */}
-                <form onSubmit={handleSearch} className="navbar__search">
-                    <input
-                        type="text"
-                        placeholder="Search rugs..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="navbar__search-input"
-                    />
-                    <button type="submit" className="navbar__search-btn">
-                        <FiSearch />
-                    </button>
-                </form>
+        {/* ── Right Actions ── */}
+        <div className={styles.actions}>
+          {/* Desktop search */}
+          <form onSubmit={handleSearchSubmit} className={styles.search} id="navbar-search-desktop">
+            <FiSearch className={styles.searchIcon} />
+            <input
+              type="text"
+              placeholder="Search rugs..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+            />
+          </form>
 
-                {/* Right Actions */}
-                <div className="navbar__actions">
-                    {/* Search Mobile */}
-                    <button
-                        onClick={() => setIsSearchOpen(!isSearchOpen)}
-                        className="navbar__action-btn navbar__action-btn--search"
-                        aria-label="Search"
-                    >
-                        <FiSearch />
-                    </button>
+          {/* Mobile search toggle */}
+          <button
+            type="button"
+            className={`${styles.actionBtn} ${styles.actionBtnSearchMobile}`}
+            onClick={() => setSearchOpen((p) => !p)}
+            aria-label="Toggle search"
+            id="navbar-search-toggle"
+          >
+            <FiSearch />
+          </button>
 
-                    {/* Wishlist */}
-                    <Link
-                        to="/wishlist"
-                        className="navbar__action-btn navbar__action-btn--wishlist"
-                        aria-label="Wishlist"
-                    >
-                        <FiHeart />
-                        {wishlistCount > 0 && <span className="navbar__badge">{wishlistCount}</span>}
-                    </Link>
+          {/* Cart */}
+          <Link to="/cart" className={styles.actionBtn} aria-label="Cart" id="navbar-cart">
+            <FiShoppingCart />
+            {CART_COUNT > 0 && <span className={styles.badge}>{CART_COUNT}</span>}
+          </Link>
 
-                    {/* Cart */}
-                    <Link
-                        to="/cart"
-                        className="navbar__action-btn navbar__action-btn--cart"
-                        aria-label="Cart"
-                    >
-                        <FiShoppingCart />
-                        {cartCount > 0 && <span className="navbar__badge">{cartCount}</span>}
-                    </Link>
+          {/* User */}
+          <Link to="/auth/login" className={styles.actionBtn} aria-label="User account" id="navbar-user">
+            <FiUser />
+          </Link>
 
-                    {/* User Menu */}
-                    {user ? (
-                        <div className="navbar__user-menu">
-                            <button className="navbar__action-btn" aria-label="User menu">
-                                <FiUser />
-                            </button>
-                            <div className="navbar__dropdown">
-                                <Link to="/profile" className="navbar__dropdown-item">
-                                    My Profile
-                                </Link>
-                                <Link to="/orders" className="navbar__dropdown-item">
-                                    Orders
-                                </Link>
-                                <button
-                                    onClick={handleLogout}
-                                    className="navbar__dropdown-item navbar__dropdown-item--logout"
-                                >
-                                    Logout
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        <Link to="/auth/login" className="navbar__action-btn">
-                            <FiUser />
-                        </Link>
-                    )}
+          {/* Hamburger */}
+          <button
+            type="button"
+            className={styles.hamburger}
+            onClick={() => setMobileMenuOpen((p) => !p)}
+            aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
+            id="navbar-hamburger"
+          >
+            {mobileMenuOpen ? <FiX /> : <FiMenu />}
+          </button>
+        </div>
+      </div>
 
-                    {/* Mobile Menu Toggle */}
-                    <button
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="navbar__menu-btn"
-                        aria-label="Toggle menu"
-                    >
-                        {isMenuOpen ? <FiX /> : <FiMenu />}
-                    </button>
-                </div>
-            </div>
+      {/* ── Mobile Search ── */}
+      <div className={`${styles.mobileSearch} ${searchOpen ? styles.mobileSearchOpen : ''}`}>
+        <form onSubmit={handleSearchSubmit} className={styles.mobileSearchForm}>
+          <FiSearch className={styles.mobileSearchIcon} />
+          <input
+            ref={searchInputRef}
+            type="text"
+            placeholder="Search rugs..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className={styles.mobileSearchInput}
+          />
+        </form>
+      </div>
 
-            {/* Mobile Search */}
-            {isSearchOpen && (
-                <form onSubmit={handleSearch} className="navbar__mobile-search">
-                    <input
-                        type="text"
-                        placeholder="Search rugs..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        autoFocus
-                        className="navbar__mobile-search-input"
-                    />
-                    <button type="submit" className="navbar__mobile-search-btn">
-                        <FiSearch />
-                    </button>
-                </form>
-            )}
+      {/* ── Overlay ── */}
+      <div
+        className={`${styles.overlay} ${mobileMenuOpen ? styles.overlayVisible : ''}`}
+        onClick={closeMobile}
+        aria-hidden="true"
+      />
 
-            {/* Mobile Menu */}
-            {isMenuOpen && (
-                <div className="navbar__mobile-menu">
-                    <Link to="/products" className="navbar__mobile-link" onClick={() => setIsMenuOpen(false)}>
-                        Shop All Rugs
-                    </Link>
-                    <Link to="/products?category=living" className="navbar__mobile-link" onClick={() => setIsMenuOpen(false)}>
-                        Living Room
-                    </Link>
-                    <Link to="/products?category=bedroom" className="navbar__mobile-link" onClick={() => setIsMenuOpen(false)}>
-                        Bedroom
-                    </Link>
-                    <Link to="/products?category=dining" className="navbar__mobile-link" onClick={() => setIsMenuOpen(false)}>
-                        Dining Room
-                    </Link>
-                    {!user && (
-                        <>
-                            <Link to="/auth/login" className="navbar__mobile-link" onClick={() => setIsMenuOpen(false)}>
-                                Login
-                            </Link>
-                            <Link to="/auth/register" className="navbar__mobile-link" onClick={() => setIsMenuOpen(false)}>
-                                Register
-                            </Link>
-                        </>
-                    )}
-                </div>
-            )}
-        </nav>
-    );
+      {/* ── Mobile Drawer ── */}
+      <aside
+        className={`${styles.mobileMenu} ${mobileMenuOpen ? styles.mobileMenuOpen : ''}`}
+        id="navbar-mobile-menu"
+      >
+        <ul className={styles.mobileNav}>
+          {NAV_LINKS.map((link) =>
+            link.children ? (
+              <li key={link.label} className={styles.mobileNavItem}>
+                <button
+                  type="button"
+                  className={styles.mobileNavLink}
+                  onClick={() => setMobileCategoryOpen((p) => !p)}
+                >
+                  {link.label}
+                  {mobileCategoryOpen
+                    ? <FiChevronUp className={styles.chevron} />
+                    : <FiChevronDown className={styles.chevron} />
+                  }
+                </button>
+
+                <ul className={`${styles.mobileDropdown} ${mobileCategoryOpen ? styles.mobileDropdownOpen : ''}`}>
+                  {link.children.map((child) => (
+                    <li key={child.label}>
+                      <Link to={child.path} className={styles.mobileDropdownItem} onClick={closeMobile}>
+                        {child.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <li key={link.label} className={styles.mobileNavItem}>
+                <Link
+                  to={link.path}
+                  className={`${styles.mobileNavLink} ${isActive(link.path) ? styles.mobileNavLinkActive : ''}`}
+                  onClick={closeMobile}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            )
+          )}
+        </ul>
+      </aside>
+    </nav>
+  );
 };

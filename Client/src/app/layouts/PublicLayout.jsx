@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "../../shared/components/navbar/Navbar";
+// import Navbar from "../../shared/components/navbar/Navbar";
+import Navbar from '@/components/layout';
 import { useDispatch } from "react-redux";
 import { refreshAccessToken } from "../../lib/http/refreshToken";
 import { logOut, setAccessToken } from "../../redux/features/authSlice";
@@ -19,9 +20,9 @@ const PublicLayout = () => {
         dispatch(logOut());
     };
 
-     useEffect(() => {
+    useEffect(() => {
         handleRefresh();
-      }, []);
+    }, []);
 
     return (
         <main style={{ maxHeight: "100vh" }}>

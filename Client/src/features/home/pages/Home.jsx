@@ -1,20 +1,13 @@
-import { Button } from '@/components/ui';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui';
+import Hero from '@/components/Hero/Hero';
 import './Home.scss';
 
 const Home = () => {
     return (
         <div className="home">
             {/* Hero Section */}
-            <section className="hero">
-                <div className="hero__content">
-                    <h1>Welcome to Ritsa Rugs</h1>
-                    <p>Discover handcrafted rugs that transform your space</p>
-                    <Link to="/products">
-                        <Button variant="primary" size="lg">Shop Now</Button>
-                    </Link>
-                </div>
-            </section>
+            <Hero />
 
             {/* Categories Section */}
             <section className="categories">
