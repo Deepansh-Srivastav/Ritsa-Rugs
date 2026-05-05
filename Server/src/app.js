@@ -50,7 +50,7 @@ app.use(cookieParser());
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/user", addressRouter);
-app.use("/api/v1/user", productRouter);
+app.use("/api/v1/products", productRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/cart", cartRouter);
 
