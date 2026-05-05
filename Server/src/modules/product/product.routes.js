@@ -7,7 +7,7 @@ import {
 
 const productRouter = Router();
 
-productRouter.use(authenticationMiddleware);
+// productRouter.use(authenticationMiddleware);
 
 productRouter.get("/get-all-products", getAllProductsController);
 productRouter.get("/get-product/:slug", getProductController);
