@@ -1,0 +1,52 @@
+/* Global design tokens */
+:root{
+	--bg: #f7f7f9;
+	--surface: #ffffff;
+	--text: #0f1724;
+	--muted: #6b7280;
+	--accent: #b5651d;
+	--radius: 10px;
+	--shadow: 0 6px 20px rgba(16,24,40,0.06);
+	--container: 1100px;
+	--gap: 16px;
+	--transition: 220ms cubic-bezier(.2,.9,.3,1);
+}
+
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+main{padding:28px;max-width:var(--container);margin:0 auto}
+
+/* Page sections */
+section{background:transparent;margin-bottom:24px}
+section h2{margin:0 0 8px;font-size:1.45rem}
+section p{color:var(--muted);margin:0 0 12px}
+
+/* Product grid and cards */
+.product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--gap)}
+.product-card{background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform var(--transition),box-shadow var(--transition)}
+.product-card:hover{transform:translateY(-6px);box-shadow:0 12px 36px rgba(16,24,40,0.12)}
+.product-card img{display:block;width:100%;height:180px;object-fit:cover}
+.product-card h3{font-size:1.05rem;margin:8px 0;color:var(--text)}
+.product-card p{margin:0;color:var(--muted)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:none;background:var(--accent);color:white;cursor:pointer;transition:transform var(--transition)}
+.btn.secondary{background:transparent;color:var(--text);border:1px solid rgba(15,23,36,0.06)}
+.btn:active{transform:translateY(1px)}
+
+/* Collections tiles */
+.collection-tile{padding:18px;background:var(--surface);border-radius:10px;box-shadow:var(--shadow);text-decoration:none;color:var(--text);display:block}
+
+/* Forms */
+input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(15,23,36,0.06);background:transparent}
+
+/* Utilities */
+.muted{color:var(--muted)}
+
+/* Responsive niceties */
+@media (max-width:720px){
+	main{padding:16px}
+	.product-card img{height:140px}
+}
